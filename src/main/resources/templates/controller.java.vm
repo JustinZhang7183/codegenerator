@@ -1,0 +1,128 @@
+package ${package.Controller};
+
+import com.finpoints.framework.result.PageData;
+import ${package.Entity.replace("entity","vo.req")}.${entity}Req;
+import ${package.Entity.replace("entity","vo.param")}.${entity}QueryParam;
+import ${package.Entity.replace("entity","vo.page")}.${entity}Page;
+import ${package.Entity.replace("entity","vo.resp")}.${entity}Resp;
+import ${package.Service}.${table.serviceName};
+import com.finpoints.framework.result.R;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+#if(${restControllerStyle})
+#else
+import org.springframework.stereotype.Controller;
+#end
+#if(${superControllerClassPackage})
+import ${superControllerClassPackage};
+#end
+/**
+ * $!{table.comment}管理
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+#if(${restControllerStyle})
+@RestController
+#else
+@Controller
+#end
+@RequestMapping("#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end")
+#if(${kotlin})
+class ${table.controllerName}#if(${superControllerClass}) : ${superControllerClass}()#end
+
+#else
+#if(${superControllerClass})
+public class ${table.controllerName} extends ${superControllerClass} {
+#else
+public class ${table.controllerName} {
+#end
+    @Autowired
+    private ${table.serviceName} ${table.entityPath}Service;
+
+    /**
+     * 创建$!{table.comment}
+     *
+     * @param ${table.entityPath}Req ${entity}Req实体
+     * @return
+     */
+    @PostMapping
+    public R<Void> create(@RequestBody @Validated ${entity}Req ${table.entityPath}Req) {
+        ${table.entityPath}Service.create(${table.entityPath}Req);
+        return R.data(null);
+    }
+
+    /**
+     * 修改$!{table.comment}
+     *
+     * @param ${table.entityPath}Req ${entity}Req实体
+     * @return
+     */
+    @PutMapping
+    public R<Void> update(@RequestBody @Validated ${entity}Req ${table.entityPath}Req) {
+        ${table.entityPath}Service.update(${table.entityPath}Req);
+        return R.data(null);
+    }
+
+    /**
+     * 分页查询$!{table.comment}
+     *
+     * @param pageNum 查询页码|1
+     * @param pageSize 每页数据量|5
+     * @param ${table.entityPath}QueryParam 查询参数
+     * @return
+     */
+    @PostMapping("/page")
+    public R<PageData<${entity}Page>> getPage(@RequestParam Integer pageNum, @RequestParam Integer pageSize, @RequestBody @Validated ${entity}QueryParam ${table.entityPath}QueryParam) {
+        PageData<${entity}Page> pageData = ${table.entityPath}Service.getPage(pageNum, pageSize, ${table.entityPath}QueryParam);
+        return R.data(pageData);
+    }
+
+    /**
+     * 查询单个$!{table.comment}
+     *
+     * @param id $!{table.comment}id|1
+     * @return
+     */
+    @GetMapping("/{id}")
+    public R<${entity}Resp> getOne(@PathVariable Long id) {
+        return R.data(${table.entityPath}Service.getOne(id));
+    }
+
+    /**
+     * 删除单个$!{table.comment}
+     *
+     * @param id $!{table.comment}id|1
+     * @return
+     */
+    @DeleteMapping("/{id}")
+    public R<Void> deleteOne(@PathVariable Long id) {
+        ${table.entityPath}Service.logicalDeleteOne(id);
+        return R.data(null);
+    }
+
+    /**
+     * 批量删除$!{table.comment}
+     *
+     * @param ids $!{table.comment}id数组|[1,2]
+     * @return
+     */
+    @DeleteMapping
+    public R<Void> logicalBatchDelete(@RequestBody List<Long> ids) {
+        ${table.entityPath}Service.logicalBatchDelete(ids);
+        return R.data(null);
+    }
+}
+#end

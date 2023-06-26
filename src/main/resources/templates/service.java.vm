@@ -1,0 +1,87 @@
+package ${package.Service};
+
+import com.finpoints.framework.result.PageData;
+import ${package.Entity}.${entity};
+import ${package.Entity.replace("entity","vo.req")}.${entity}Req;
+import ${package.Entity.replace("entity","vo.param")}.${entity}QueryParam;
+import ${package.Entity.replace("entity","vo.page")}.${entity}Page;
+import ${package.Entity.replace("entity","vo.resp")}.${entity}Resp;
+import ${superServiceClassPackage};
+
+import java.util.List;
+
+/**
+ * $!{table.comment} 服务类
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+#if(${kotlin})
+interface ${table.serviceName} : ${superServiceClass}<${entity}>
+#else
+public interface ${table.serviceName} extends ${superServiceClass}<${entity}> {
+    /**
+     * 创建$!{table.comment}
+     *
+     * @param ${table.entityPath}Req ${entity}Req实体
+     */
+    void create(${entity}Req ${table.entityPath}Req);
+
+    /**
+     * 修改$!{table.comment}
+     *
+     * @param ${table.entityPath}Req ${entity}Req实体
+     */
+    void update(${entity}Req ${table.entityPath}Req);
+
+    /**
+     * 分页查询$!{table.comment}
+     *
+     * @param pageNum 查询页码
+     * @param pageSize 每页数据量
+     * @param ${table.entityPath}QueryParam 查询参数
+     * @return
+     */
+    PageData<${entity}Page> getPage(Integer pageNum, Integer pageSize, ${entity}QueryParam ${table.entityPath}QueryParam);
+
+    /**
+     * 查询单个$!{table.comment}
+     *
+     * @param id $!{table.comment}id
+     * @return
+     */
+    ${entity}Resp getOne(Long id);
+
+    /**
+     * 删除单个$!{table.comment}
+     *
+     * @param id $!{table.comment}id
+     * @return
+     */
+    void deleteOne(Long id);
+
+    /**
+     * 批量删除$!{table.comment}
+     *
+     * @param ids $!{table.comment}id数组
+     * @return
+     */
+    void batchDelete(List<Long> ids);
+
+    /**
+     * 逻辑删除单个$!{table.comment}
+     *
+     * @param id $!{table.comment}id
+     * @return
+     */
+    void logicalDeleteOne(Long id);
+
+    /**
+     * 批量逻辑删除$!{table.comment}
+     *
+     * @param ids $!{table.comment}id数组
+     * @return
+     */
+    void logicalBatchDelete(List<Long> ids);
+}
+#end

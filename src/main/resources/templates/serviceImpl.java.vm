@@ -1,0 +1,138 @@
+package ${package.ServiceImpl};
+
+import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.finpoints.framework.result.PageData;
+import ${package.Entity}.${entity};
+import ${package.Entity.replace("entity","vo.req")}.${entity}Req;
+import ${package.Entity.replace("entity","vo.param")}.${entity}QueryParam;
+import ${package.Entity.replace("entity","vo.page")}.${entity}Page;
+import ${package.Entity.replace("entity","vo.resp")}.${entity}Resp;
+import ${package.Mapper}.${table.mapperName};
+import ${package.Service}.${table.serviceName};
+import ${superServiceImplClassPackage};
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.stream.Collectors;
+
+/**
+ * $!{table.comment} 服务实现类
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Service
+#if(${kotlin})
+open class ${table.serviceImplName} : ${superServiceImplClass}<${table.mapperName}, ${entity}>(), ${table.serviceName} {
+
+}
+#else
+public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.mapperName}, ${entity}> implements ${table.serviceName} {
+    @Resource
+    private ${table.mapperName} ${table.entityPath}Mapper;
+
+    /**
+     * 创建$!{table.comment}
+     *
+     * @param ${table.entityPath}Req ${entity}Req实体
+     */
+    public void create(${entity}Req ${table.entityPath}Req) {
+        ${entity} ${table.entityPath} = new ${entity}();
+        BeanUtil.copyProperties(${table.entityPath}Req, ${table.entityPath});
+        ${table.entityPath}Mapper.insert(${table.entityPath});
+    }
+
+    /**
+     * 修改$!{table.comment}
+     *
+     * @param ${table.entityPath}Req ${entity}Req实体
+     */
+    public void update(${entity}Req ${table.entityPath}Req) {
+        ${entity} ${table.entityPath} = new ${entity}();
+        BeanUtil.copyProperties(${table.entityPath}Req, ${table.entityPath});
+        updateById(${table.entityPath});
+    }
+
+    /**
+     * 分页查询$!{table.comment}
+     *
+     * @param pageNum 查询页码
+     * @param pageSize 每页数据量
+     * @param ${table.entityPath}QueryParam 查询参数
+     * @return
+     */
+    public PageData<${entity}Page> getPage(Integer pageNum, Integer pageSize, ${entity}QueryParam ${table.entityPath}QueryParam) {
+        ${entity} ${table.entityPath} = new ${entity}();
+        BeanUtil.copyProperties(${table.entityPath}QueryParam, ${table.entityPath});
+        QueryWrapper<${entity}> queryWrapper = new QueryWrapper<>(${table.entityPath});
+        IPage<${entity}> page = ${table.entityPath}Mapper.selectPage(new Page<>(pageNum, pageSize), queryWrapper);
+        List<${entity}Page> ${table.entityPath}PageList = page.getRecords().stream().map(e -> BeanUtil.toBean(e,
+                ${entity}Page.class)).collect(Collectors.toList());
+        return new PageData<>(${table.entityPath}PageList, page.getTotal());
+    }
+
+    /**
+     * 查询单个$!{table.comment}
+     *
+     * @param id $!{table.comment}id
+     * @return
+     */
+    public ${entity}Resp getOne(Long id) {
+        ${entity} ${table.entityPath} = ${table.entityPath}Mapper.selectById(id);
+        ${entity}Resp ${table.entityPath}Resp = new ${entity}Resp();
+        BeanUtil.copyProperties(${table.entityPath}, ${table.entityPath}Resp);
+        return ${table.entityPath}Resp;
+    }
+
+    /**
+     * 删除单个$!{table.comment}
+     *
+     * @param id $!{table.comment}id
+     * @return
+     */
+    public void deleteOne(Long id) {
+        ${table.entityPath}Mapper.deleteById(id);
+    }
+
+    /**
+     * 批量删除$!{table.comment}
+     *
+     * @param ids $!{table.comment}id数组
+     * @return
+     */
+    public void batchDelete(List<Long> ids) {
+        ${table.entityPath}Mapper.deleteBatchIds(ids);
+    }
+
+    /**
+     * 逻辑删除单个$!{table.comment}
+     *
+     * @param id $!{table.comment}id
+     * @return
+     */
+    public void logicalDeleteOne(Long id) {
+        UpdateWrapper<${entity}> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("id", id);
+        updateWrapper.set("is_delete", true);
+        ${table.entityPath}Mapper.update(null, updateWrapper);
+    }
+
+    /**
+     * 批量逻辑删除$!{table.comment}
+     *
+     * @param ids $!{table.comment}id数组
+     * @return
+     */
+    public void logicalBatchDelete(List<Long> ids) {
+        UpdateWrapper<${entity}> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.in("id", ids);
+        updateWrapper.set("is_delete", true);
+        ${table.entityPath}Mapper.update(null, updateWrapper);
+    }
+}
+#end
