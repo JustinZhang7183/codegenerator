@@ -67,21 +67,5 @@ public interface ${table.serviceName} extends ${superServiceClass}<${entity}> {
      * @return
      */
     void batchDelete(List<Long> ids);
-
-    /**
-     * 逻辑删除单个$!{table.comment}
-     *
-     * @param id $!{table.comment}id
-     * @return
-     */
-    void logicalDeleteOne(Long id);
-
-    /**
-     * 批量逻辑删除$!{table.comment}
-     *
-     * @param ids $!{table.comment}id数组
-     * @return
-     */
-    void logicalBatchDelete(List<Long> ids);
 }
 #end

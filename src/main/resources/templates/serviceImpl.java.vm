@@ -2,7 +2,6 @@ package ${package.ServiceImpl};
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.justin.kitchen.recipe.management.vo.common.PageData;
@@ -107,32 +106,6 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
      */
     public void batchDelete(List<Long> ids) {
         ${table.entityPath}Mapper.deleteBatchIds(ids);
-    }
-
-    /**
-     * 逻辑删除单个$!{table.comment}
-     *
-     * @param id $!{table.comment}id
-     * @return
-     */
-    public void logicalDeleteOne(Long id) {
-        UpdateWrapper<${entity}> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq("id", id);
-        updateWrapper.set("is_delete", true);
-        ${table.entityPath}Mapper.update(null, updateWrapper);
-    }
-
-    /**
-     * 批量逻辑删除$!{table.comment}
-     *
-     * @param ids $!{table.comment}id数组
-     * @return
-     */
-    public void logicalBatchDelete(List<Long> ids) {
-        UpdateWrapper<${entity}> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.in("id", ids);
-        updateWrapper.set("is_delete", true);
-        ${table.entityPath}Mapper.update(null, updateWrapper);
     }
 }
 #end

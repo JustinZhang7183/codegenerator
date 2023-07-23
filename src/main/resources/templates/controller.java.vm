@@ -109,7 +109,7 @@ public class ${table.controllerName} {
      */
     @DeleteMapping("/{id}")
     public R<Void> deleteOne(@PathVariable Long id) {
-        ${table.entityPath}Service.logicalDeleteOne(id);
+        ${table.entityPath}Service.deleteOne(id);
         return R.data(null);
     }
 
@@ -120,8 +120,8 @@ public class ${table.controllerName} {
      * @return
      */
     @DeleteMapping
-    public R<Void> logicalBatchDelete(@RequestBody List<Long> ids) {
-        ${table.entityPath}Service.logicalBatchDelete(ids);
+    public R<Void> batchDelete(@RequestBody List<Long> ids) {
+        ${table.entityPath}Service.batchDelete(ids);
         return R.data(null);
     }
 }
