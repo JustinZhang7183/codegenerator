@@ -1,6 +1,6 @@
 package ${package.Service};
 
-import com.finpoints.framework.result.PageData;
+import com.justin.kitchen.recipe.management.vo.common.PageData;
 import ${package.Entity}.${entity};
 import ${package.Entity.replace("entity","vo.req")}.${entity}Req;
 import ${package.Entity.replace("entity","vo.param")}.${entity}QueryParam;

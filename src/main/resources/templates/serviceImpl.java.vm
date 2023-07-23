@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.finpoints.framework.result.PageData;
+import com.justin.kitchen.recipe.management.vo.common.PageData;
 import ${package.Entity}.${entity};
 import ${package.Entity.replace("entity","vo.req")}.${entity}Req;
 import ${package.Entity.replace("entity","vo.param")}.${entity}QueryParam;
@@ -16,7 +16,7 @@ import ${package.Service}.${table.serviceName};
 import ${superServiceImplClassPackage};
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.List;
 import java.util.stream.Collectors;
 

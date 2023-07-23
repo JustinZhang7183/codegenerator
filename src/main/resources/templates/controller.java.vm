@@ -1,12 +1,12 @@
 package ${package.Controller};
 
-import com.finpoints.framework.result.PageData;
+import com.justin.kitchen.recipe.management.vo.common.PageData;
 import ${package.Entity.replace("entity","vo.req")}.${entity}Req;
 import ${package.Entity.replace("entity","vo.param")}.${entity}QueryParam;
 import ${package.Entity.replace("entity","vo.page")}.${entity}Page;
 import ${package.Entity.replace("entity","vo.resp")}.${entity}Resp;
 import ${package.Service}.${table.serviceName};
-import com.finpoints.framework.result.R;
+import com.justin.kitchen.recipe.management.vo.common.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;

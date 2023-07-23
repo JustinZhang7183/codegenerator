@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.generator.config.FileOutConfig;
 import com.baomidou.mybatisplus.generator.config.GlobalConfig;
 import com.baomidou.mybatisplus.generator.config.PackageConfig;
 import com.baomidou.mybatisplus.generator.config.StrategyConfig;
+import com.baomidou.mybatisplus.generator.config.builder.ConfigBuilder;
 import com.baomidou.mybatisplus.generator.config.converts.MySqlTypeConvert;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.querys.MySqlQuery;
@@ -22,29 +23,33 @@ import java.util.Map;
 public class CodeGenerator {
     public static void main(String[] args) {
         DataSourceConfig dataSourceConfig = new DataSourceConfig();
-        dataSourceConfig.setUrl("jdbc:mysql://ip:port/xxx?useSSL=false");
+        dataSourceConfig.setUrl("jdbc:mysql://192.168.1.101:3306/kitchen-system?useSSL=false");
         dataSourceConfig.setDriverName("com.mysql.cj.jdbc.Driver");
-        dataSourceConfig.setUsername("xxx");
-        dataSourceConfig.setPassword("xxx");
+        dataSourceConfig.setUsername("root");
+        dataSourceConfig.setPassword("TiMpWfM5-");
         dataSourceConfig.setDbQuery(new MySqlQuery());
         dataSourceConfig.setTypeConvert(new MySqlTypeConvert());
 
-        String fileModule = "module";
         List<String> fileTables = new ArrayList<>();
-        fileTables.add("xxx");
-        fileTables.add("yyyy");
-        generateModuleCode(fileModule, fileTables, dataSourceConfig);
+        fileTables.add("recipes");
+        PackageAndPath packageAndPath = new PackageAndPath();
+        packageAndPath.setEntityPackage("kitchen.recipe.management.entity")
+            .setMapperPackage("kitchen.recipe.management.mapper")
+            .setServiceImplPackage("kitchen.recipe.management.service.impl")
+            .setServicePackage("kitchen.recipe.management.service")
+            .setControllerPackage("kitchen.recipe.management.controller")
+            .setVoPath("D:\\workspace\\git resource\\kitchen-system\\recipe-management\\src\\main\\java\\com\\justin\\kitchen\\recipe\\management\\vo")
+            .setEntityPath("D:\\workspace\\git resource\\kitchen-system\\recipe-management\\src\\main\\java\\com\\justin\\kitchen\\recipe\\management\\entity")
+            .setMapperPath("D:\\workspace\\git resource\\kitchen-system\\recipe-management\\src\\main\\java\\com\\justin\\kitchen\\recipe\\management\\mapper")
+            .setServiceImplPath("D:\\workspace\\git resource\\kitchen-system\\recipe-management\\src\\main\\java\\com\\justin\\kitchen\\recipe\\management\\service\\impl")
+            .setServicePath("D:\\workspace\\git resource\\kitchen-system\\recipe-management\\src\\main\\java\\com\\justin\\kitchen\\recipe\\management\\service")
+            .setControllerPath("D:\\workspace\\git resource\\kitchen-system\\recipe-management\\src\\main\\java\\com\\justin\\kitchen\\recipe\\management\\controller")
+            .setXmlPath("D:\\workspace\\git resource\\kitchen-system\\recipe-management\\src\\main\\resources\\mappers");
+
+        generateModuleCode("com.justin", fileTables, dataSourceConfig, packageAndPath);
     }
 
-    private static void generateModuleCode(String module, List<String> tables, DataSourceConfig dataSourceConfig) {
-        String apiTemplatePath = "";
-        String serviceTemplatePath = "";
-        String controllerTemplatePath = "";
-        String xmlTemplatePath = "";
-        apiTemplatePath = apiTemplatePath.replaceAll("module", module);
-        serviceTemplatePath = serviceTemplatePath.replaceAll("module", module);
-        controllerTemplatePath = controllerTemplatePath.replaceAll("module", module);
-        xmlTemplatePath = xmlTemplatePath.replaceAll("module", module);
+    private static void generateModuleCode(String basePackage, List<String> tables, DataSourceConfig dataSourceConfig, PackageAndPath packageAndPath) {
         AutoGenerator autoGenerator = new AutoGenerator();
         // global config
         GlobalConfig globalConfig = new GlobalConfig();
@@ -58,19 +63,19 @@ public class CodeGenerator {
         autoGenerator.setDataSource(dataSourceConfig);
         // package config
         PackageConfig packageConfig = new PackageConfig();
-        packageConfig.setParent("com.xxx.framework.xxx");
-        packageConfig.setEntity(module + ".service.entity");
-        packageConfig.setMapper(module + ".service.mapper");
-        packageConfig.setService(module + ".service.api");
-        packageConfig.setServiceImpl(module + ".service.provider");
-        packageConfig.setController("bootstrap.controller." + module);
+        packageConfig.setParent(basePackage);
+        packageConfig.setController(packageAndPath.getControllerPackage());
+        packageConfig.setService(packageAndPath.getServicePackage());
+        packageConfig.setServiceImpl(packageAndPath.getServiceImplPackage());
+        packageConfig.setMapper(packageAndPath.getMapperPackage());
+        packageConfig.setEntity(packageAndPath.getEntityPackage());
         Map<String, String> pathInfo = new HashMap<>();
-        pathInfo.put(ConstVal.ENTITY_PATH, apiTemplatePath + "\\entity");
-        pathInfo.put(ConstVal.MAPPER_PATH, apiTemplatePath + "\\mapper");
-        pathInfo.put(ConstVal.XML_PATH, xmlTemplatePath);
-        pathInfo.put(ConstVal.SERVICE_PATH, apiTemplatePath + "\\api");
-        pathInfo.put(ConstVal.SERVICE_IMPL_PATH, serviceTemplatePath + "\\provider");
-        pathInfo.put(ConstVal.CONTROLLER_PATH, controllerTemplatePath);
+        pathInfo.put(ConstVal.ENTITY_PATH, packageAndPath.getEntityPath());
+        pathInfo.put(ConstVal.MAPPER_PATH, packageAndPath.getMapperPath());
+        pathInfo.put(ConstVal.XML_PATH, packageAndPath.getXmlPath());
+        pathInfo.put(ConstVal.SERVICE_PATH, packageAndPath.getServicePath());
+        pathInfo.put(ConstVal.SERVICE_IMPL_PATH, packageAndPath.getServiceImplPath());
+        pathInfo.put(ConstVal.CONTROLLER_PATH, packageAndPath.getControllerPath());
         packageConfig.setPathInfo(pathInfo);
         autoGenerator.setPackageInfo(packageConfig);
         // strategy config
@@ -88,29 +93,28 @@ public class CodeGenerator {
             }
         };
         List<FileOutConfig> fileOutConfigList = new ArrayList<>();
-        String finalApiTemplatePath = apiTemplatePath;
         fileOutConfigList.add(new FileOutConfig("templates\\voreq.vm") {
             @Override
             public String outputFile(TableInfo tableInfo) {
-                return finalApiTemplatePath + "\\vo\\req\\" + tableInfo.getEntityName() + "Req" + StringPool.DOT_JAVA;
+                return packageAndPath.getVoPath() + "\\req\\" + tableInfo.getEntityName() + "Req" + StringPool.DOT_JAVA;
             }
         });
         fileOutConfigList.add(new FileOutConfig("templates\\voresp.vm") {
             @Override
             public String outputFile(TableInfo tableInfo) {
-                return finalApiTemplatePath + "\\vo\\resp\\" + tableInfo.getEntityName() + "Resp" + StringPool.DOT_JAVA;
+                return packageAndPath.getVoPath() + "\\resp\\" + tableInfo.getEntityName() + "Resp" + StringPool.DOT_JAVA;
             }
         });
         fileOutConfigList.add(new FileOutConfig("templates\\voparam.vm") {
             @Override
             public String outputFile(TableInfo tableInfo) {
-                return finalApiTemplatePath + "\\vo\\param\\" + tableInfo.getEntityName() + "QueryParam" + StringPool.DOT_JAVA;
+                return packageAndPath.getVoPath() + "\\param\\" + tableInfo.getEntityName() + "QueryParam" + StringPool.DOT_JAVA;
             }
         });
         fileOutConfigList.add(new FileOutConfig("templates\\vopage.vm") {
             @Override
             public String outputFile(TableInfo tableInfo) {
-                return finalApiTemplatePath + "\\vo\\page\\" + tableInfo.getEntityName() + "Page" + StringPool.DOT_JAVA;
+                return packageAndPath.getVoPath() + "\\page\\" + tableInfo.getEntityName() + "Page" + StringPool.DOT_JAVA;
             }
         });
         injectionConfig.setFileOutConfigList(fileOutConfigList);
